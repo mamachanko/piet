@@ -3,6 +3,14 @@ resources:
     type: git
     source:
       uri: https://github.com/mamachanko/piet
+  - name: release
+    type: s3
+    source:
+      bucket: piet
+      regexp: piet-(.*).jar
+      access_key_id: {{minio-access-key}}
+      secret_access_key: {{minio-secret-key}}
+      endpoint: http://minio:9000
 
 jobs:
   - name: build
@@ -13,11 +21,20 @@ jobs:
         config:
           inputs:
             - name: src
+          outputs:
+            - name: out
           platform: linux
           image_resource:
             type: docker-image
             source:
               repository: openjdk
               tag: 11
+          caches:
+            - path: gradle
+          params:
+            GRADLE_USER_HOME: ../gradle
           run:
             path: src/scripts/build.sh
+      - put: release
+        params:
+          file: out/piet-*.jar

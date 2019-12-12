@@ -8,3 +8,8 @@ cd "$(dirname "$0")"/..
   --no-daemon \
   clean \
   build
+
+mkdir -p ../out
+cp \
+  build/libs/piet-0.0.1-SNAPSHOT.jar \
+  ../out/

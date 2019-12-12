@@ -16,4 +16,5 @@ fly \
   set-pipeline \
   --non-interactive \
   --pipeline piet \
-  --config pipeline.yml
+  --config pipeline.yml \
+  --load-vars-from secrets.yml
