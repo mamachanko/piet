@@ -1,0 +1,11 @@
+applications:
+  - name: piet
+    path: build/libs/piet-0.0.1-SNAPSHOT.jar
+    disk_quota: 1G
+    memory: 1G
+    instances: 2
+    routes:
+      - route: piet.cfapps.io
+    stack: cflinuxfs3
+    env:
+      JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.0.5 } }'
