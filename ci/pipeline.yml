@@ -1,0 +1,23 @@
+resources:
+  - name: src
+    type: git
+    source:
+      uri: https://github.com/mamachanko/piet
+
+jobs:
+  - name: build
+    plan:
+      - get: src
+        trigger: true
+      - task: build
+        config:
+          inputs:
+            - name: src
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: openjdk
+              tag: 11
+          run:
+            path: src/scripts/build.sh
