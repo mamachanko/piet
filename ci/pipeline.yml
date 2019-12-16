@@ -7,7 +7,7 @@ resources:
     type: s3
     source:
       bucket: piet
-      regexp: piet-(.*).jar
+      regexp: "(.*).tar.gz"
       access_key_id: {{minio-access-key}}
       secret_access_key: {{minio-secret-key}}
       endpoint: http://minio:9000
@@ -45,16 +45,16 @@ jobs:
             path: src/scripts/build.sh
       - put: release
         params:
-          file: out/piet-*.jar
+          file: out/*.tar.gz
   - name: deploy
     plan:
       - get: release
         trigger: true
-      - get: src
-        trigger: false
+        params:
+          unpack: true
       - put: deployment
         params:
-          manifest: src/ci/manifest.yml
-          path: release/piet-0.0.1-SNAPSHOT.jar
+          manifest: release/manifest.yml
+          path: release/piet.jar
           current_app_name: piet
           show_app_log: true

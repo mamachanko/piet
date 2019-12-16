@@ -11,6 +11,7 @@ function main() {
   configure_concourse
   start_concourse
   install_fly_cli
+  create_bucket
   deploy_pipeline
 
   set +x
@@ -54,6 +55,22 @@ function start_concourse() {
 function install_fly_cli() {
   curl "http://localhost:${CONCOURSE_PORT}/api/v1/cli?arch=amd64&platform=darwin" >/usr/local/bin/fly
   chmod a+x /usr/local/bin/fly
+}
+
+function create_bucket() {
+  mc \
+    config \
+    host \
+    add \
+    piet \
+    http://localhost:7000 \
+    $(yq r secrets.yml minio-access-key) \
+    $(yq r secrets.yml minio-secret-key)
+
+  mc \
+    mb \
+    --ignore-existing \
+    piet/piet
 }
 
 function deploy_pipeline() {
