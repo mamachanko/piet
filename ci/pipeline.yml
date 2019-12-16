@@ -11,6 +11,14 @@ resources:
       access_key_id: {{minio-access-key}}
       secret_access_key: {{minio-secret-key}}
       endpoint: http://minio:9000
+  - name: deployment
+    type: cf
+    source:
+      api: https://api.run.pivotal.io
+      username: {{pws-username}}
+      password: {{pws-password}}
+      organization: {{pws-org}}
+      space: {{pws-space}}
 
 jobs:
   - name: build
@@ -38,3 +46,15 @@ jobs:
       - put: release
         params:
           file: out/piet-*.jar
+  - name: deploy
+    plan:
+      - get: release
+        trigger: true
+      - get: src
+        trigger: false
+      - put: deployment
+        params:
+          manifest: src/ci/manifest.yml
+          path: release/piet-0.0.1-SNAPSHOT.jar
+          current_app_name: piet
+          show_app_log: true
