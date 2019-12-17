@@ -19,6 +19,14 @@ resources:
       password: {{pws-password}}
       organization: {{pws-org}}
       space: {{pws-space}}
+  - name: every-5-mins
+    type: time
+    source:
+      interval: 5m
+      location: Europe/Berlin
+      days: [Monday, Tuesday, Wednesday, Thursday, Friday]
+      start: 8:00 AM
+      stop: 6:00 PM
 
 jobs:
   - name: build
@@ -58,3 +66,19 @@ jobs:
           path: release/piet.jar
           current_app_name: piet
           show_app_log: true
+      - get: src
+        trigger: false
+      - task: smoke-test
+        file: src/ci/tasks/smoke-test.yml
+        params:
+          PIET_BASEURI: https://piet.cfapps.io
+  - name: smoke-test
+    plan:
+      - get: every-5-mins
+        trigger: true
+      - get: src
+        trigger: false
+      - task: smoke-test
+        file: src/ci/tasks/smoke-test.yml
+        params:
+          PIET_BASEURI: https://piet.cfapps.io
