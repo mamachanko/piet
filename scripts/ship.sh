@@ -6,6 +6,8 @@ cd "$(dirname "$0")"/..
 
 ./scripts/build.sh
 
+./scripts/deploy-pipeline.sh
+
 git push
 
 set +x
