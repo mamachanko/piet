@@ -50,7 +50,12 @@ jobs:
           params:
             GRADLE_USER_HOME: ../gradle
           run:
-            path: src/scripts/build.sh
+            path: sh
+            args:
+              - -exc
+              - |
+                ./src/scripts/install-postgresql.sh
+                ./src/scripts/build.sh
       - put: release
         params:
           file: out/*.tar.gz

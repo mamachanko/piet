@@ -11,5 +11,5 @@ run:
   args:
     - -exc
     - |
-      apk add --no-cache bash curl
+      apk add --no-cache bash curl jq
       ./src/scripts/smoke-test.sh

@@ -1,14 +1,20 @@
 package io.github.mamachanko.piet.ocr
 
+import io.github.mamachanko.piet.Image
+import io.github.mamachanko.piet.ImageCreated
+import io.github.mamachanko.piet.ImageProcessed
 import org.bytedeco.leptonica.global.lept
 import org.bytedeco.tesseract.TessBaseAPI
 import org.slf4j.LoggerFactory
+import org.springframework.context.ApplicationEventPublisher
+import org.springframework.context.event.EventListener
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.util.ResourceUtils
 import java.io.File
 
 @Service
-class OcrService {
+class OcrService(private val applicationEventPublisher: ApplicationEventPublisher) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -16,7 +22,15 @@ class OcrService {
         Init(ResourceUtils.getFile("classpath:tessdata/").absolutePath, "eng")
     }
 
-    fun recognize(content: ByteArray): String =
+    @Async
+    @EventListener
+    fun handleImageCreated(imageCreated: ImageCreated) {
+        logger.info("Handling $imageCreated")
+        val recognizedText = recognize(imageCreated.image.content)
+        applicationEventPublisher.publishEvent(ImageProcessed(imageCreated.image.copy(text = recognizedText)))
+    }
+
+    private fun recognize(content: ByteArray): String =
             TempFile(content).use {
                 recognize(it.file)
             }
