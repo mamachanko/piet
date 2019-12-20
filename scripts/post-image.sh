@@ -34,10 +34,10 @@ function awaitComplete() {
   echo
 
   SECONDS=0
-  timeout=20
+  TIMEOUT=60
   until [ "$imageStatus" = "Complete" ]; do
 
-    if [ $SECONDS -ge $timeout ]; then
+    if [ $SECONDS -ge $TIMEOUT ]; then
       echo "⏰ Awaiting completion timed out!"
       echo
       exit 1
