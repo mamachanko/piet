@@ -7,7 +7,7 @@ applications:
     routes:
       - route: piet.cfapps.io
     services:
-      - db
+      - piet-db
     stack: cflinuxfs3
     env:
       JBP_CONFIG_OPEN_JDK_JRE: '{ jre: { version: 11.0.5 } }'
