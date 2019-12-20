@@ -76,7 +76,7 @@ jobs:
       - task: smoke-test
         file: src/ci/tasks/smoke-test.yml
         params:
-          PIET_BASEURI: https://piet.cfapps.io
+          PIET_BASE_URI: https://piet.cfapps.io
   - name: smoke-test
     plan:
       - get: every-5-mins
@@ -86,4 +86,4 @@ jobs:
       - task: smoke-test
         file: src/ci/tasks/smoke-test.yml
         params:
-          PIET_BASEURI: https://piet.cfapps.io
+          PIET_BASE_URI: https://piet.cfapps.io

@@ -1,8 +1,8 @@
 package io.github.mamachanko.piet.ocr
 
 import com.nhaarman.mockitokotlin2.verify
-import io.github.mamachanko.piet.Image
-import io.github.mamachanko.piet.ImageCreated
+import io.github.mamachanko.piet.image.Image
+import io.github.mamachanko.piet.image.ImageProcessingRequested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -23,8 +23,10 @@ class OcrServiceEventTest {
 
     @Test
     internal fun `should handle ImageCreated events`() {
-        applicationEventPublisher.publishEvent(ImageCreated(Image(id = "test-image-id", content = "test-image-content".toByteArray())))
+        val event = ImageProcessingRequested(Image().copy(id = "test-image-id"), "test-image-content".toByteArray())
 
-        verify(ocrService).handleImageCreated(ImageCreated(Image(id = "test-image-id", content = "test-image-content".toByteArray())))
+        applicationEventPublisher.publishEvent(event)
+
+        verify(ocrService).handleImageProcessingRequested(event)
     }
 }

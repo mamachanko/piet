@@ -6,29 +6,30 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
+import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpHeaders
+import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.util.ResourceUtils
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.RestController
+
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class FeatureTests {
+
+    @LocalServerPort
+    private var serverPort: Int = -1
 
     @Autowired
     private lateinit var restTemplate: TestRestTemplate
 
     @Test
     internal fun `Piet can get the text out of an image`() {
-        val testImage = ResourceUtils.getFile("classpath:test-image.png")
-
         val creationResponse = restTemplate.postForEntity(
                 "/api/images",
-                HttpEntity(
-                        testImage.readBytes(),
-                        HttpHeaders().apply { contentType = MediaType.IMAGE_PNG }
-                ),
+                mapOf("url" to "http://localhost:$serverPort/test-image.png"),
                 String::class.java
         )
 
@@ -51,14 +52,17 @@ class FeatureTests {
         } while (getResponse.body!!.status.toLowerCase() != "complete")
 
         val image = restTemplate.getForObject(imageURI, Image::class.java)
-        assertThat(image.id).isNotBlank()
+        assertThat(image.selfLink).isNotBlank()
         assertThat(image.status).isEqualToIgnoringCase("complete")
-        assertThat(image.text).containsIgnoringCase("ocr")
+        assertThat(image.text).containsIgnoringCase("optical character recognition")
     }
 
     data class Image(
-            val id: String, // TODO: UUID
             val status: String,
-            val text: String?
-    )
+            val text: String?,
+            val _links: Map<String, Map<String, String>>
+    ) {
+        val selfLink: String
+            get() = _links.getValue("self").getValue("href")
+    }
 }

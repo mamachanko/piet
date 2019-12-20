@@ -1,8 +1,7 @@
 package io.github.mamachanko.piet.ocr
 
-import io.github.mamachanko.piet.Image
-import io.github.mamachanko.piet.ImageCreated
-import io.github.mamachanko.piet.ImageProcessed
+import io.github.mamachanko.piet.image.ImageProcessingRequested
+import io.github.mamachanko.piet.image.ImageProcessingCompleted
 import org.bytedeco.leptonica.global.lept
 import org.bytedeco.tesseract.TessBaseAPI
 import org.slf4j.LoggerFactory
@@ -24,10 +23,10 @@ class OcrService(private val applicationEventPublisher: ApplicationEventPublishe
 
     @Async
     @EventListener
-    fun handleImageCreated(imageCreated: ImageCreated) {
+    fun handleImageProcessingRequested(imageCreated: ImageProcessingRequested) {
         logger.info("Handling $imageCreated")
-        val recognizedText = recognize(imageCreated.image.content)
-        applicationEventPublisher.publishEvent(ImageProcessed(imageCreated.image.copy(text = recognizedText)))
+        val recognizedText = recognize(imageCreated.content)
+        applicationEventPublisher.publishEvent(ImageProcessingCompleted(imageCreated.image.copy(text = recognizedText)))
     }
 
     private fun recognize(content: ByteArray): String =

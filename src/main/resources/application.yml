@@ -9,3 +9,6 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
     baseline-on-migrate: true
+  data:
+    rest:
+      base-path: /api

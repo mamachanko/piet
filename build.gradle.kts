@@ -5,7 +5,6 @@ plugins {
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     kotlin("jvm") version "1.3.61"
     kotlin("plugin.spring") version "1.3.61"
-    id("org.jetbrains.kotlin.plugin.jpa") version "1.3.61"
 }
 
 group = "io.github.mamachanko"
@@ -20,6 +19,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-data-rest")
     implementation("org.postgresql:postgresql")
     implementation("org.flywaydb:flyway-core:6.1.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

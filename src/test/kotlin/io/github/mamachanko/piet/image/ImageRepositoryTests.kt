@@ -1,4 +1,4 @@
-package io.github.mamachanko.piet
+package io.github.mamachanko.piet.image
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -16,10 +16,10 @@ class ImageRepositoryTests {
 
     @Test
     internal fun `should save image`() {
-        val image = Image(
+        val image = Image().copy(
                 status = ImageStatus.New,
-                text = null,
-                content = "image-content".toByteArray()
+                text = "image-text",
+                url = "image-url"
         )
 
         val savedImage = imageRepository.save(image)
@@ -27,7 +27,7 @@ class ImageRepositoryTests {
 
         assertThat(retrievedImage.id).isNotBlank()
         assertThat(retrievedImage.status).isEqualTo(ImageStatus.New)
-        assertThat(retrievedImage.content).isEqualTo("image-content".toByteArray())
-        assertThat(retrievedImage.text).isNull()
+        assertThat(retrievedImage.url).isEqualTo("image-url")
+        assertThat(retrievedImage.text).isEqualTo("image-text")
     }
 }

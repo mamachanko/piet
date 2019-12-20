@@ -3,9 +3,9 @@ package io.github.mamachanko.piet.ocr
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import io.github.mamachanko.piet.Image
-import io.github.mamachanko.piet.ImageCreated
-import io.github.mamachanko.piet.ImageProcessed
+import io.github.mamachanko.piet.image.Image
+import io.github.mamachanko.piet.image.ImageProcessingCompleted
+import io.github.mamachanko.piet.image.ImageProcessingRequested
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -25,13 +25,13 @@ class OcrServiceTest {
 
     @Test
     internal fun `handleImageCreated - should recognize image text and publish event`() {
-        ocrService.handleImageCreated(
-                ImageCreated(
-                        Image(content = ResourceUtils.getFile("classpath:test-image.png").readBytes())
+        ocrService.handleImageProcessingRequested(
+                ImageProcessingRequested(
+                        Image(), ResourceUtils.getFile("classpath:static/test-image.png").readBytes()
                 )
         )
 
-        argumentCaptor<ImageProcessed>().apply {
+        argumentCaptor<ImageProcessingCompleted>().apply {
             verify(applicationEventPublisher).publishEvent(capture())
 
             val testImageRegex = Regex(
