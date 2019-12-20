@@ -20,6 +20,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
+    implementation("org.springframework.boot:spring-boot-starter-integration")
     implementation("org.postgresql:postgresql")
     implementation("org.flywaydb:flyway-core:6.1.2")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
