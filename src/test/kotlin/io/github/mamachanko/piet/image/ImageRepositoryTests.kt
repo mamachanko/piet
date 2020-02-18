@@ -7,7 +7,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 
-@DataJpaTest
+@DataJpaTest(properties = [
+    "spring.datasource.url=jdbc:tc:postgresql:12.1-alpine:///",
+    "spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver"
+])
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class ImageRepositoryTests {
 

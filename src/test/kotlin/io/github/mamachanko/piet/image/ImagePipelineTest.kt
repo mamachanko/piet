@@ -13,7 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.mock.mockito.MockBean
 
 @SpringBootTest(
-        webEnvironment = WebEnvironment.NONE
+        webEnvironment = WebEnvironment.NONE,
+        properties = [
+            "spring.datasource.url=jdbc:tc:postgresql:12.1-alpine:///",
+            "spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver"
+        ]
 )
 class ImagePipelineTest {
 

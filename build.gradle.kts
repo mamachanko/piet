@@ -26,10 +26,13 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.bytedeco:tesseract-platform:4.1.0-1.5.2")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
+    testImplementation("org.testcontainers:testcontainers:1.12.5")
+    testImplementation("org.testcontainers:postgresql:1.12.5")
 }
 
 tasks.withType<Test> {

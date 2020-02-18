@@ -8,17 +8,17 @@ resources:
     source:
       bucket: piet
       regexp: "(.*).tar.gz"
-      access_key_id: {{minio-access-key}}
-      secret_access_key: {{minio-secret-key}}
+      access_key_id: ((minio-access-key))
+      secret_access_key: ((minio-secret-key))
       endpoint: http://minio:9000
   - name: deployment
     type: cf
     source:
       api: https://api.run.pivotal.io
-      username: {{pws-username}}
-      password: {{pws-password}}
-      organization: {{pws-org}}
-      space: {{pws-space}}
+      username: ((pws-username))
+      password: ((pws-password))
+      organization: ((pws-org))
+      space: ((pws-space))
   - name: every-5-mins
     type: time
     source:
@@ -34,6 +34,7 @@ jobs:
       - get: src
         trigger: true
       - task: build
+        privileged: true
         config:
           inputs:
             - name: src
@@ -43,18 +44,18 @@ jobs:
           image_resource:
             type: docker-image
             source:
-              repository: openjdk
-              tag: 11
+              { repository: bsideup/concourse-build-env }
           caches:
             - path: gradle
           params:
             GRADLE_USER_HOME: ../gradle
           run:
-            path: sh
+            path: bash
             args:
               - -exc
               - |
-                ./src/scripts/install-postgresql.sh
+                source /docker-lib.sh
+                start_docker "3" "3" "" ""
                 ./src/scripts/build.sh
       - put: release
         params:

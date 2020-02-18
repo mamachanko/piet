@@ -6,17 +6,19 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.util.ResourceUtils
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RestController
 
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = WebEnvironment.RANDOM_PORT,
+        properties = [
+            "spring.datasource.url=jdbc:tc:postgresql:12.1-alpine:///",
+            "spring.datasource.driver-class-name=org.testcontainers.jdbc.ContainerDatabaseDriver"
+        ]
+)
 class FeatureTests {
 
     @LocalServerPort
